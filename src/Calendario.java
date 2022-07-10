@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 public class Calendario {
 	String id;
 	ArrayList<Evento> eventos;
-	public static final String[] semana = {"Lunes","Martes","Miércoles","Jueves","Viernes","Sábado","Domingo"}; //estoy asumiendo que va como en C, veremos si no me llevo un susto.
+	public static final String[] semana = {"Lunes","Martes","Miércoles","Jueves","Viernes","Sábado","Domingo"};
 	public static final String[] meses = {"","Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"};
 	
 	public Calendario(String _id)
@@ -254,7 +254,20 @@ public class Calendario {
 			if ((e.getFecha().getMes()) == mes)
 				lista.add(e);
 		}
+		return lista;
+	}
 
+	public ArrayList<Evento> getEventosFecha(Fecha f)
+	{
+		ArrayList <Evento> lista = new ArrayList<Evento>();
+	
+		if (this.eventos.isEmpty())
+			return null;
+		for (Evento e : this.eventos)	
+		{
+			if (e.getFecha().getAnno() == f.getAnno() && e.getFecha().getMes() == f.getMes() && e.getFecha().getDia() == f.getDia())
+				lista.add(e);
+		}
 		return lista;
 	}
 }
