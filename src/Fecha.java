@@ -20,6 +20,8 @@ public class Fecha {
 	public void setHora(int _hora, int _minuto){hora = _hora; minuto = _minuto;}
 	
 	public int getAnno(){return ano;}
+	public int getMes(){return mes;}
+	public int getDia(){return dia;}
 	
 	public String getFecha(){return String.format("%d/%d/%d",dia,mes,ano);}
 	
