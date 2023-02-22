@@ -2,15 +2,17 @@ import java.io.IOException;
 import java.awt.*;
 import java.awt.event.*;
 
-import javax.swing.*;  
+import javax.swing.*;
 
 public class Ventana {
     JFrame f;
     JPanel p, t, principal;
+    Font fuente;
+    
     public Ventana(){
         f=new JFrame();
 
-        f.setSize(640,300);
+        f.setSize(500,480);
         f.setTitle("Calendario");  
         /* Registro de eventos de ratón en el frame */
         f.addMouseListener(new MouseAdapter() {
@@ -18,6 +20,7 @@ public class Ventana {
                //editMenu.show(f, e.getX(), e.getY());
         }});              
         f.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE); 
+        fuente = new Font("ProFontIIx NF", Font.PLAIN, 22);   
         //f.setIconImage(image); 
     }
 
@@ -28,13 +31,14 @@ public class Ventana {
         String[] hoy;
 
         principal=new JPanel(new GridBagLayout());
-        principal.setBackground(new Color(9,9,10,255));
+        principal.setBackground(new Color(6,6,6,255));
         principal.setOpaque(true);
         ajustesPrincipal = new GridBagConstraints();  
 
         p=new JPanel(new GridBagLayout());
         p.setLayout(new GridBagLayout());  
-        p.setBackground(new Color(9,9,10,255));
+        p.setBackground(new Color(6,6,6,255));
+        p.setFont(fuente);
         ajustesPrincipal.fill = GridBagConstraints.HORIZONTAL;
         ajustesPrincipal.gridx = 0;
         ajustesPrincipal.gridy = 0;
@@ -42,7 +46,7 @@ public class Ventana {
         
         t=new JPanel(new GridBagLayout());
         t.setLayout(new GridBagLayout());  
-        t.setBackground(new Color(9,9,10,255));
+        t.setBackground(new Color(6,6,6,255));
         ajustesPrincipal.gridx = 0;
         ajustesPrincipal.gridy = 1; 
         principal.add(t, ajustesPrincipal);
@@ -79,14 +83,18 @@ public class Ventana {
         gbc = new GridBagConstraints();  
 
         gbc.fill = GridBagConstraints.HORIZONTAL;  
-        gbc.insets = new Insets(5,5,5,5);
+        gbc.insets = new Insets(10,10,10,10);
         gbc.gridx = 0;  
         gbc.gridy = 0;  
-        b = new JButton("*");
-        p.add(b, gbc);  
+        //b = new JButton("*");
+        //p.add(b, gbc);  
         gbc.gridx = 3;  
         gbc.gridy = 0;  
         b = new JButton("<");
+        b.setFont(fuente);
+        b.setForeground(new Color(255,255,255,255));
+		b.setBackground(new Color(0,0,0,255));  
+		b.setBorder(BorderFactory.createEmptyBorder(4,4,4,4));
         b.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent e){
                 if (mes == 1)
@@ -96,15 +104,26 @@ public class Ventana {
             }
         });
         p.add(b, gbc);  
+        
         gbc.anchor = GridBagConstraints.PAGE_START;  
         gbc.gridx = 4;  
         gbc.gridy = 0;  
-        l = new JLabel(Calendario.meses[mes]);
+        l = new JLabel(Calendario.meses[mes] + " del " + anno);
+        l.setFont(fuente);
+		l.setForeground(new Color(206,212,218,255));
+        l.setForeground(new Color(255,255,255,255));
+ 		l.setBackground(new Color(0,0,0,255));  
+ 		l.setBorder(BorderFactory.createEmptyBorder(4,4,4,4));
         p.add(l, gbc); 
+        
         gbc.fill = GridBagConstraints.HORIZONTAL;  
         gbc.gridx = 5;  
         gbc.gridy = 0;  
         b = new JButton(">");
+        b.setFont(fuente);
+        b.setForeground(new Color(255,255,255,255));
+ 		b.setBackground(new Color(0,0,0,255));  
+ 		b.setBorder(BorderFactory.createEmptyBorder(4,4,4,4));
         b.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent e){
                 if (mes == 12)
@@ -113,12 +132,12 @@ public class Ventana {
                     generaMes(anno, mes+1, c);
             }
         });
-        p.add(b, gbc);  
-        gbc.gridx = 7;  
-        gbc.gridy = 0;  
-        l = new JLabel(String.format("%d",anno));
-        p.add(l, gbc);  
-       
+        p.add(b, gbc); 
+      
+        /*
+         * Botones de días
+         * */
+        gbc.insets = new Insets(0,0,0,0);
         ndias = Calendario.getDiasMes(anno,mes);
         i = Calendario.getDiaSemana(anno, mes, 1);
         z=0;
@@ -127,6 +146,11 @@ public class Ventana {
             gbc.gridx = j+1;  
             gbc.gridy = z;  
             b = new JButton(String.format("%s", Calendario.semana[j]));
+
+			b.setForeground(new Color(0,0,0,255));
+			b.setFont(fuente);
+			b.setBackground(new Color(248,249,250,255));  
+			b.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
             t.add(b, gbc);  
         }
         z++;
@@ -141,8 +165,17 @@ public class Ventana {
                     MenuDia(new Fecha(Integer.parseInt(e.getActionCommand()),mes,anno),c);
                 }
             });
+ 
+			bDias[j].setForeground(new Color(255,255,255,255));
+			bDias[j].setFont(fuente);
+			bDias[j].setBackground(new Color(0,0,0,255));  
+			bDias[j].setBorder(BorderFactory.createEmptyBorder(15,15,15,15));
+			
             if (Integer.parseInt(hoy[2]) == j && mes == (Integer.parseInt(hoy[1])))
-                bDias[j].setBackground(Color.red);
+            {
+                bDias[j].setBackground(new Color(4,102,200,255));  
+            }
+
             t.add(bDias[j], gbc);  
             
             if (i == 7){
@@ -167,6 +200,9 @@ public class Ventana {
     public void MenuDia(Fecha fecha, Calendario c)
     {
         JLabel dia = new JLabel(fecha.getFecha());
+        dia.setForeground(new Color(255,255,255,255));
+  		dia.setFont(fuente);
+  		dia.setBorder(BorderFactory.createEmptyBorder(15,15,15,15));
         GridBagConstraints gbc = new GridBagConstraints(); 
         JButton b;
         int contador;
@@ -177,9 +213,13 @@ public class Ventana {
         f.repaint(); 
          
         gbc.fill = GridBagConstraints.HORIZONTAL;  
-        gbc.insets = new Insets(5,5,5,5);
+        gbc.insets = new Insets(4,4,4,4);
 
         b = new JButton("X");
+        b.setForeground(new Color(255,255,255,255));
+		b.setFont(fuente);
+		b.setBackground(new Color(4,102,200,255));  
+		b.setBorder(BorderFactory.createEmptyBorder(15,15,15,15));
         b.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent e){
                 generaMes(fecha.getAnno(), fecha.getMes(), c);
@@ -202,6 +242,10 @@ public class Ventana {
             for (Evento iter : c.getEventosFecha(fecha))
             {
                 b = new JButton(String.format("%s - %s", iter.getNombre(), iter.getFecha().getHora()));
+                b.setForeground(new Color(255,255,255,255));
+        		b.setFont(fuente);
+        		b.setBackground(new Color(52,58,64,255));  
+        		b.setBorder(BorderFactory.createEmptyBorder(15,15,15,15));
                 b.addActionListener(new ActionListener(){
                     public void actionPerformed(ActionEvent e){
                         MenuEditarEvento(iter, c);
@@ -215,7 +259,11 @@ public class Ventana {
             }
         }
         
-        b = new JButton(String.format("Añadir evento (+)"));
+        b = new JButton(String.format("Añadir evento"));
+        b.setForeground(new Color(255,255,255,255));
+		b.setFont(fuente);
+		b.setBackground(new Color(4,102,200,255));  
+		b.setBorder(BorderFactory.createEmptyBorder(15,15,15,15));
         b.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent e){
                 MenuAnadirEvento(fecha, c);
@@ -244,12 +292,17 @@ public class Ventana {
         f.repaint(); 
 
         gbc.fill = GridBagConstraints.HORIZONTAL;  
-        gbc.insets = new Insets(5,5,5,5);
+        gbc.insets = new Insets(4,4,4,4);
         gbc.gridx = 0;  
         gbc.gridy = 0;  
         gbc.gridwidth = 1;
 
         bc = new JButton("X");
+        bc.setForeground(new Color(255,255,255,255));
+		bc.setFont(fuente);
+        bc.setBackground(new Color(4,102,200,255));  
+		bc.setBorder(BorderFactory.createEmptyBorder(15,15,15,15));
+		
         bc.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent e){
                 MenuDia(fecha,c);
@@ -261,12 +314,16 @@ public class Ventana {
         gbc.gridy = 0;  
         gbc.gridwidth = 2;
         txt = new JLabel(fecha.getFecha());
+        txt.setForeground(new Color(255,255,255,255));
+		txt.setFont(fuente);
+		txt.setBorder(BorderFactory.createEmptyBorder(15,15,15,15));
         p.add(txt,gbc);
         
         gbc.gridx = 0;  
         gbc.gridy = 1;  
         gbc.gridwidth = 3;
         tN = new JTextField("Nombre");
+        tN.setFont(fuente);
         t.add(tN,gbc);
 
         gbc.gridx = 0;  
@@ -274,22 +331,28 @@ public class Ventana {
         gbc.gridwidth = 1;
         gbc.weightx = 1;
         tH = new JTextField("0");
+        tH.setFont(fuente);
         t.add(tH,gbc);
+        
         gbc.gridx = 1;  
         gbc.gridy = 2;  
         gbc.gridwidth = 1;
         txt = new JLabel(":");
+        txt.setFont(fuente);
         t.add(txt,gbc);
+        
         gbc.gridx = 2;  
         gbc.gridy = 2;  
         gbc.gridwidth = 1;
         tM = new JTextField("0");
+        tM.setFont(fuente);
         t.add(tM,gbc);
 
         gbc.gridx = 0;  
         gbc.gridy = 3;  
         gbc.gridwidth = 3;
         imp = new JComboBox<String>(new String[]{"1","2","3","4","5"});
+        imp.setFont(fuente);
         t.add(imp,gbc);
         
         gbc.gridx = 0;  
@@ -297,6 +360,7 @@ public class Ventana {
         gbc.gridwidth = 3;
         gbc.gridheight = 1;
         tC = new JTextField("Comentario");
+        tC.setFont(fuente);
         t.add(tC,gbc);
         
         gbc.gridx = 0;  
@@ -304,6 +368,10 @@ public class Ventana {
         gbc.gridheight = 1;
         gbc.gridwidth = 3;
         bt = new JButton("Añadir evento");
+        bt.setForeground(new Color(255,255,255,255));
+		bt.setFont(fuente);
+        bt.setBackground(new Color(4,102,200,255));  
+		bt.setBorder(BorderFactory.createEmptyBorder(15,15,15,15));
         bt.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent e){
                 fecha.setHora(Integer.parseInt(tH.getText()),Integer.parseInt(tM.getText()));

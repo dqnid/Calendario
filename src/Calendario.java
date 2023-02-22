@@ -14,7 +14,8 @@ public class Calendario {
 	String id;
 	String dir;
 	ArrayList<Evento> eventos;
-	public static final String[] semana = {"Lunes","Martes","Miércoles","Jueves","Viernes","Sábado","Domingo"};
+	public static final String[] semana = {"L","M","X","J","V","S","D"};
+	//public static final String[] semana = {"Lunes","Martes","Miércoles","Jueves","Viernes","Sábado","Domingo"};
 	public static final String[] meses = {"","Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"};
 	
 	public Calendario(String _id, String _dir)
